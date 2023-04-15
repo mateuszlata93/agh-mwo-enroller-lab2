@@ -17,9 +17,12 @@ public class ParticipantRestController {
 	@Autowired
 	ParticipantService participantService;
 
-	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ResponseEntity<?> getParticipants() {
-		Collection<Participant> participants = participantService.getAll();
+	//@RequestMapping(value = "", method = RequestMethod.GET)
+	@GetMapping("")
+	public ResponseEntity<?> getParticipants(@RequestParam(value="sortBy", defaultValue = "") String sortBy,
+											 @RequestParam(value="sortOrder", defaultValue =  "") String sortOrder,
+											 @RequestParam(value="key", defaultValue = "") String searchKey) {
+		Collection<Participant> participants = participantService.getAll(sortBy, sortOrder, searchKey);
 		return new ResponseEntity<Collection<Participant>>(participants, HttpStatus.OK);
 	}
 
@@ -59,9 +62,12 @@ public class ParticipantRestController {
 		if (participant == null) {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
-		participant.setPassword(updatedParticipant.getPassword());
-		participantService.update(participant);
+
+		//participant.setPassword(updatedParticipant.getPassword());
+		//participant.setLogin(updatedParticipant.getLogin());
+		updatedParticipant.setLogin(login);
+		participantService.update(updatedParticipant);
+		//participantService.update(participant);
 		return new ResponseEntity<Participant>(HttpStatus.OK);
 	}
-
 }
