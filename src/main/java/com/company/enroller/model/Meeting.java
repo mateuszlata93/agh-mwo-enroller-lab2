@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 @Table(name = "meeting")
@@ -25,7 +26,7 @@ public class Meeting {
 	@Column
 	private String date;
 
-	@JsonIgnore
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "meeting_participant", joinColumns = { @JoinColumn(name = "meeting_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "participant_login") })
@@ -75,4 +76,14 @@ public class Meeting {
 		return participants;
 	}
 
+	@Override
+	public String toString() {
+		return "Meeting{" +
+				"id=" + id +
+				", title='" + title + '\'' +
+				", description='" + description + '\'' +
+				", date='" + date + '\'' +
+				", participants=" + participants +
+				'}';
+	}
 }
